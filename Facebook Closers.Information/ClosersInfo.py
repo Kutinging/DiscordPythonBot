@@ -28,8 +28,8 @@ def check(filename,str):
 def getImgUrl(PostCount):
     try:
         ImgUrl = Posts[PostCount].find('img',{'class':'scaledImageFitWidth img'})['src']
-    except :
-        return 'https://i.imgur.com/08ovhYT.png'
+    except TypeError:
+        ImgUrl = Posts[PostCount].find('img',{'class':'_4lpf'})['src']
     finally:
         return ImgUrl
 
@@ -63,9 +63,14 @@ PostsLists = HTMLCode.find('div',{'class':'_2pie _14i5 _1qkq _1qkx'})
 PostList = PostsLists.find('div',{'class':'_1xnd'})
 Posts = PostList.find_all('div',{'class':'_1dwg _1w_m _q7o'})
 
-Messages = getMessages(1)
-Img = getImgUrl(1)
-PostUrl = getPostUrl(1)
+
+try:
+    Img = getImgUrl(1)
+except:
+    Img = 'https://i.imgur.com/08ovhYT.png'
+finally:
+    Messages = getMessages(1)
+    PostUrl = getPostUrl(1)
 
 sha1 = hashlib.sha1((PostUrl).encode("utf-8")).hexdigest()
 if check('ClosersInfo',sha1)==0:
